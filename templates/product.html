@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="product-detail">
+  <img src="{{ product.image_url or 'https://via.placeholder.com/500x600' }}" alt="{{ product.name }}">
+  <div class="detail-info">
+    <h1>{{ product.name }}</h1>
+    <p class="price big">Rs. {{ "%.2f"|format(product.price) }}</p>
+    <p><strong>Category:</strong> {{ product.category.name if product.category else '-' }}</p>
+    <p><strong>Size:</strong> {{ product.size or '-' }}</p>
+    <p><strong>Color:</strong> {{ product.color or '-' }}</p>
+    <p><strong>Stock:</strong> {{ product.stock }} available</p>
+    <p class="desc">{{ product.description }}</p>
+    <form method="POST" action="/add_to_cart/{{ product.id }}" class="add-form">
+      <label>Quantity:</label>
+      <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+      <button type="submit">🛒 Add to Cart</button>
+    </form>
+  </div>
+</div>
+
+{% if related %}
+<div class="card">
+  <h2>You may also like</h2>
+  <div class="product-grid">
+    {% for p in related %}
+      <div class="product-card">
+        <a href="/product/{{ p.id }}">
+          <img src="{{ p.image_url or 'https://via.placeholder.com/300x400' }}" alt="{{ p.name }}">
+        </a>
+        <h3><a href="/product/{{ p.id }}">{{ p.name }}</a></h3>
+        <p class="price">Rs. {{ "%.2f"|format(p.price) }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

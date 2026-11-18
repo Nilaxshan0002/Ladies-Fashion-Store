@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>📦 My Orders</h1>
+
+{% if orders %}
+  {% for o in orders %}
+    <div class="card">
+      <h3>Order #{{ o.id }} — <span class="badge {{ o.status|lower }}">{{ o.status }}</span></h3>
+      <p class="muted">Placed: {{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+      <table>
+        <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+        <tbody>
+          {% for item in o.items %}
+            <tr>
+              <td>{{ item.product_name }}</td>
+              <td>Rs. {{ "%.2f"|format(item.price) }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>Rs. {{ "%.2f"|format(item.price * item.quantity) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p><strong>Total:</strong> Rs. {{ "%.2f"|format(o.total) }}</p>
+      <p><strong>Address:</strong> {{ o.address }} · 📞 {{ o.phone }}</p>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="card"><p>You haven't placed any orders yet. <a href="/shop">Shop now</a></p></div>
+{% endif %}
+
+{% endblock %}

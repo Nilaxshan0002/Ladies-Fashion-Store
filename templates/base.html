@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👗 Ladies Fashion Boutique</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="brand">👗 Ladies Fashion</a>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/shop">Shop</a>
+    <a href="/cart">🛒 Cart {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a>
+    {% if session.role == 'admin' %}<a href="/admin">Admin</a>{% endif %}
+    {% if session.user_id %}
+      <a href="/orders">Orders</a>
+      <span class="user">👤 {{ session.username }}</span>
+      <a href="/logout" class="btn-small">Logout</a>
+    {% else %}
+      <a href="/login" class="btn-small">Login</a>
+      <a href="/register" class="btn-small">Register</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="flash-wrap">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="flash {{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<main>{% block content %}{% endblock %}</main>
+
+<footer>
+  <p>© 2026 Ladies Fashion Boutique · Made with ❤️ in Flask</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>🛡️ Admin Dashboard</h1>
+
+<div class="stats">
+  <div class="stat-card"><h2>{{ products|length }}</h2><p>Products</p></div>
+  <div class="stat-card"><h2>{{ orders|length }}</h2><p>Orders</p></div>
+  <div class="stat-card"><h2>{{ users|length }}</h2><p>Users</p></div>
+</div>
+
+<a href="/admin/add_product" class="cta">➕ Add New Product</a>
+
+<div class="card">
+  <h2>Products</h2>
+  <table>
+    <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for p in products %}
+        <tr>
+          <td><img src="{{ p.image_url or 'https://via.placeholder.com/50' }}" class="thumb"></td>
+          <td>{{ p.name }}</td>
+          <td>Rs. {{ "%.2f"|format(p.price) }}</td>
+          <td>{{ p.stock }}</td>
+          <td>{{ p.category.name if p.category else '-' }}</td>
+          <td class="actions">
+            <a href="/admin/edit_product/{{ p.id }}" class="btn-sm">✏️ Edit</a>
+            <a href="/admin/delete_product/{{ p.id }}" class="btn-sm danger"
+               onclick="return confirm('Delete?')">🗑</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Orders</h2>
+  <table>
+    <thead><tr><th>ID</th><th>User</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+        <tr>
+          <td>#{{ o.id }}</td>
+          <td>{{ o.user.username }}</td>
+          <td>Rs. {{ "%.2f"|format(o.total) }}</td>
+          <td><span class="badge {{ o.status|lower }}">{{ o.status }}</span></td>
+          <td class="actions">
+            <a href="/admin/order/{{ o.id }}/Shipped" class="btn-sm">🚚</a>
+            <a href="/admin/order/{{ o.id }}/Delivered" class="btn-sm">✅</a>
+            <a href="/admin/order/{{ o.id }}/Cancelled" class="btn-sm danger">🚫</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>💳 Checkout</h1>
+
+<div class="checkout-grid">
+  <div class="card">
+    <h2>Shipping Details</h2>
+    <form method="POST">
+      <input name="address" placeholder="Delivery address" required>
+      <input name="phone" placeholder="Phone number" required>
+      <button type="submit" class="cta">✅ Place Order</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Order Summary</h2>
+    {% for i in items %}
+      <p>{{ i.quantity }} × {{ i.product.name }} — Rs. {{ "%.2f"|format(i.product.price * i.quantity) }}</p>
+    {% endfor %}
+    <h3 class="total">Total: Rs. {{ "%.2f"|format(total) }}</h3>
+  </div>
+</div>
+
+{% endblock %}
